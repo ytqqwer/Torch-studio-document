@@ -1,0 +1,4 @@
+# generic temporary files
+*~
+*.swp
+*.out

@@ -1,0 +1,566 @@
+\documentclass[a4paper, 10pt]{article}
+
+% ----------------- Graphics ---------------
+\usepackage{color}
+\definecolor{niceblue}{rgb}{0.1, 0.2, 0.8}
+\definecolor{nicered}{rgb}{0.8, 0.2, 0.1}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{framed} \definecolor{shadecolor}{rgb}{0.8, 0.8, 0.8}
+
+% ----------------- Tables -----------------
+
+\usepackage{longtable}
+\usepackage{booktabs}
+
+% ----------------- Fonts -------------------
+% \setmainfont{}
+% \setsansfont{}
+% \setmonofont{}
+\usepackage{xeCJK}
+\xeCJKsetup{AutoFakeBold=true, CJKmath=true}
+
+% ----------------- Enviorment --------------
+\usepackage{abstract}
+\usepackage{comment}
+
+% ----------------- Layout ------------------
+\usepackage[
+  top = 1in,
+  bottom = 1in,
+  left = 1.25in,
+  right = 1.25in
+]{geometry}
+\usepackage[
+  bookmarks = true,
+  CJKbookmarks = true,
+  colorlinks = true,
+  linkcolor = nicered
+]{hyperref}
+\parskip=4pt
+\parindent=0pt
+\linespread{1.3} % In some cases, use {1.2}
+
+% ----------------- Code --------------------
+\definecolor{inlinecodecolor}{rgb}{0.9,0.9,0.9}
+\newcommand{\inlinecode}[1]{\colorbox{inlinecodecolor}{\texttt{#1}}}
+
+% -------------------------------------------
+\begin{document}
+\title{Cocos2d-x 安装、配置、使用指南}
+\author{火炬工作室}
+\date{Spring 2017}
+
+\maketitle
+\addcontentsline{toc}{section}{Table of Contents}
+\tableofcontents
+\listoftables
+\listoffigures
+
+\section{为什么有这篇文档}
+
+是的，书籍上、网络上到处都有讲解如何安装和配置 cocos2d-x 开发环境。但它
+们都过时且杂乱。
+
+为了
+
+\begin{enumerate}
+\item 避免下载和使用存在 bug 和特性不全的旧版本软件
+\item 使全组拥有相同的开发环境，便于相互协作和调试
+\end{enumerate}
+
+本组成员请务必\textbf{根据本文档一点不差的配置开发环境}。可选的配置项都
+在文中有说明，请不要省去你认为不必要的配置，导致以后协作调试时不方
+便。 本配置在某些方面会和书上的，乃至官方的有所不同。不同的地方，以本文
+档为准。
+
+注：有些软件包可能会由于网络原因下载不下来，群文件里面可能会有。
+
+\section{开发平台 Windows / 目标运行平台 Windows}
+
+本节所配置的环境是后续所有章节的基础。
+
+目标运行平台 Windows 使得我们可以很方便的在 Windows 平台下直接进行测试，
+而不用再去使用性能较弱的 Android 模拟器。
+
+\subsection{下载和安装 Python}
+
+cocos2d-x 大量使用 python 脚本来完成任务。
+
+\begin{enumerate}
+\item 下载 python 2.7.13:
+  \url{https://www.python.org/ftp/python/2.7.13/python-2.7.13.amd64.msi}
+  。
+
+\item 安装时，在如图 \ref{fig:install-python} 界面选择\texttt{add python.exe
+  to Path}。这样就不用再手动添加 PATH 了。
+\end{enumerate}
+
+% \begin{figure}[!hpp]
+%   \centering
+%   \includegraphics*[width=.6\textwidth]{images/install-python}
+%   \caption{安装 Python}
+%   \label{fig:install-python}
+% \end{figure}
+
+\begin{center}
+  \includegraphics*[width=.6\textwidth]{images/install-python}
+\end{center}
+
+\subsection{下载和安装 Visual Studio}
+
+cocos2d-x 需要 2015 及以上的 VS 版本来更好的支持 C++11 特性。
+
+如图 \ref{fig:install-vs}，安装时要自定义安装选项，注意勾选``common
+tools for Visual C++ 2015''
+
+% \begin{figure}[!hp]
+%   \centering
+%   \includegraphics*[width=.4\textwidth]{images/install-vs}
+%   \caption{安装 VS}
+%   \label{fig:install-vs}
+% \end{figure}
+
+\begin{center}
+  \includegraphics*[width=.4\textwidth]{images/install-vs}
+\end{center}
+
+\subsection{下载和配置 cocos2d-x}
+
+cocos2d-x 下载后解压即可使用。
+
+\begin{enumerate}
+\item 下载 cocos2d-x 3.14.1:
+  \url{http://www.cocos2d-x.org/filedown/cocos2d-x-3.14.1.zip}。
+  下载完成后建议将其解压到某方便找到的位置，记其为 A；
+
+\item 解压完成后
+  将
+  ``\texttt{A\textbackslash{}tools\textbackslash{}cocos2d-console\textbackslash{}bin}''
+  加入系统变量 PATH 中，以保证能在 CMD 中使用\texttt{cocos} 命令。
+\end{enumerate}
+
+\subsection{Cocos Creator?}
+
+No, No Cocos Creator。
+
+Cocos 官网上虽然吹得天花乱坠，但它不支持 C++，只能用于 JS/Lua 项目，和
+我们的 C++ 项目一点关系都没有，帮不上我们任何忙。
+
+\subsection{Cocos Studio?}
+
+Cocos studio 项目在 2016 年 4 月的时候就 EOL 了。
+
+官方声明如下：
+
+\begin{shaded}
+Cocos Studio has been EOL'd as of April 2016. There will be no more
+releases of Cocos Studio.
+
+The last version of Cocos Studio is v3.10 and can be downloaded for
+Mac and Windows. This version of Cocos Studio requires version v3.10
+of Cocos2d-x. This version of Cocos Studio works best in Windows 7 and
+OS X 10.10.
+
+If you update Cocos2d-x to a version greater than v3.10, you may
+experience compatibility issues. If you run Cocos Studio on Windows 10
+or OS X 10.11, you may experience compatibility issues.
+\end{shaded}
+
+在写这篇安装指南的时候，项目还没开始，游戏制作流程还没制定下来，无法知
+晓我们的项目是否需要使用 cocos studio。
+
+再加上现在市场上比较新的书籍上面关于 cocos studio 的介绍也较少，有介绍
+的也大多放到最后一章，这使得我们无法评估 cocos studio 的重要性。
+
+所以本配置指南暂不建议安装 cocos studio。如果以后经过试验证明确实需要安
+装 cocos studio，届时会有另外一篇文档来说明。
+
+\subsection{验证你的安装}
+
+\begin{enumerate}
+\item 在 CMD 中切换到某目录下(记为 B)，输入如图 \ref{fig:cocos-new} 所
+  示命令\\ \inlinecode{cocos new -l cpp -p me.rtdarwin.hello -d
+    .} （将 me.rtdarwin.hello 替换为你喜欢的包名）。\texttt{cocos} 会在
+  当前目录下建立一个名为\texttt{MyCppGame} 的文件夹，里面即为新的项目。
+  \begin{center}
+    \includegraphics*[width=.8\textwidth]{images/cocos-new}
+  \end{center}
+
+\item VS > 打开项目
+  \texttt{B\textbackslash{}MyCppGame\textbackslash{}proj.win32\textbackslash{}MyCppGame.sln}
+\item 在 VS 点击``本地调试器''，尝试编译运行 MyCppGame。首次编译可能需
+  要较长时间，取决于电脑配置。编译完成后若弹出如 \ref{fig:cocos-hello}
+  所示画面，则可认为环境搭建成功。
+  \begin{center}
+    \includegraphics*[width=.8\textwidth]{images/cocos-hello}
+  \end{center}
+\end{enumerate}
+
+% \begin{figure}[!hp]
+%   \centering
+%   \includegraphics*[width=.8\textwidth]{images/cocos-new}
+%   \caption{Cocos 建立新项目}
+%   \label{fig:cocos-new}
+% \end{figure}
+
+% \begin{figure}[h!p]
+%   \centering
+%   \includegraphics*[width=.8\textwidth]{images/cocos-hello}
+%   \caption{Cocos 运行示例}
+%   \label{fig:cocos-hello}
+% \end{figure}
+
+\section{开发平台 Windows / 目标运行平台 Android}
+
+本节配置的环境建立在上一节所配置环境的基础上。如果你不需要将其安装到安
+卓上进行调试，那么上一节就足够了。
+
+\subsection{下载和安装 JDK}
+
+// 假设你已经完成
+  
+% \subsection{下载和安装 Android Studio}
+
+% 从 2015 年起，谷歌就不再推荐使用 Eclipse+ADT 了。他们自己推出了官
+% 方 IDE：Android Studio。
+
+% \begin{enumerate}
+% \item Android Studio 官方下载
+%   点 \url{https://developer.android.com/index.html} 由于下载速度较慢，
+%   推荐使用 Android Studio 郑州大学开源镜像站下载
+%   点 \url{http://10.66.0.111/android/android-studio/2.3/}。文件
+%   名 \texttt{android-studio-bundle-162.3764568-windows.exe}，1.8G.
+  
+% \item 在如图 \ref{fig:install-as} 选择『custom』，选择安装所有组件。
+% \end{enumerate}
+
+% \begin{figure}[h!]
+%   \centering
+%   \includegraphics*[width=.48\textwidth]{images/install-as}
+%   \includegraphics*[width=.48\textwidth]{images/install-as2}
+%   \caption{安装 Android Studio}
+%   \label{fig:install-as}
+% \end{figure}
+
+\subsection{下载和配置 SDK}
+
+在 Android 平台上运行 cocos2d-x 游戏，并不需要在 Windows 安装 Eclipse
+或者 Android Studio。这些 IDE 对 cocos2d-x 的支持也不是很好，有时会出现
+问题。
+
+下面所做的配置，不影响你原先的安卓开发环境。当项目开发结束后，直接将本
+节配置所占用的目录（AndroidDev）删除即可。
+
+\begin{enumerate}
+\item 从郑州大学开源镜像站处 \url{10.66.0.111/android/SDKTools/} 下载
+  \texttt{tools\_r25.2.3-windows.zip}，293M
+  
+\item 在某目录下（比如 D 盘根目录）下新建文件夹 \texttt{AndroidDev}，将
+  上一步下载的 tools.zip 解压进去（记得消去嵌套的同名目录）
+
+  注意：这个 AndroidDev 目录是我们这个配置所有安卓相关文件的存放目录，
+  每个要安装的组件在其中占有一个子目录。
+
+\item 在资源管理器下进入
+  \texttt{D:\textbackslash{}Androiddev\textbackslash{}tools\textbackslash{}}
+  点击 \texttt{android.bat}，打开 SDK Manager
+
+\item 在打开的 Android SDK Manager 窗口里面修改 SDK 设置： 郑州大
+  学 Android SDK 反代使用说
+  明。\url{http://10.66.0.111/wiki/android.html}
+
+\item 在打开的 Adnroid SDK Manager 窗口里面选择 Android 开发必需
+  的 packages，进行安装：
+
+  \begin{itemize}
+  \item Tools::Adnroid SDK Platform-tools
+  \item Tools::Adnroid SDK Build-tools
+  \item Android 6.0(API 23)::SDK Platform
+  \item Android 6.0(API 23)::Intel x86 Atom System Image
+  \item Extras::Android Support Repository
+  \end{itemize}
+
+  上面提到即为我们环境搭建要用到的所有 packages。不过 SDK mgr 可能会自动
+  勾选某些其他 packages，为了磁盘空间考虑，建议不安装。
+
+  注意不要更新到 Android SDK tools 25.3.0 以上（如果 SDK mgr 里面有的话）。
+  这会导致我们所配置的 cocos2d-x 环境无法工作。如果你要了解具体原因，
+  见 cocos2d-x v3.15 Release notes
+  (\url{https://github.com/cocos2d/cocos2d-x/blob/v3/docs/RELEASE_NOTES.md})最后一段话。
+
+\end{enumerate}
+
+\subsection{新建 AVD}
+
+AVD 用于在电脑上模拟安卓设备。如果你确定仅使用自己的安卓手机调试的话，
+本节可以跳过。
+
+\begin{enumerate}
+\item 进入 CMD，使用命令 \\
+  \inlinecode{你的 AndroidDev 所在的位置（比
+    如 C:）
+    \textbackslash{}AndroidDev\textbackslash{}tools\textbackslash{}android.bat
+    avd} \\
+  打开 AVD 管理器
+\item 新建如图 \ref{fig:new-avd} 所示的 AVD。
+
+  注意：要勾选``Use Host GPU''。勾选这个可以显著提高 AVD 的运行速度。
+\end{enumerate}
+
+% \begin{figure}[!hp]
+%   \centering
+%   \includegraphics*[width=.6\textwidth]{images/new-avd}
+%   \caption{新建 AVD}
+%   \label{fig:new-avd}
+% \end{figure}
+
+\begin{center}
+  \includegraphics*[width=.6\textwidth]{images/new-avd}
+\end{center}
+
+\subsection{下载和配置 NDK}
+
+\begin{enumerate}
+\item 从郑州大学开源镜像站
+  处 \url{http://10.66.0.111/android/repository/} 下载\\
+  \texttt{android-ndk-r14-windows-x86\_64.zip}，733M
+  
+\item 将其解压到我们在 『下载和配置 SDK 』一节所建的\texttt{AndroidDev}
+  目录下。（记得消去嵌套的同名目录）
+\end{enumerate}
+
+\subsection{下载和安装 Apache Ant}
+
+\begin{enumerate}
+\item 从 \url{https://www.apache.org/dist/ant/binaries/} 处下
+  载 \texttt{apache-ant-1.10.1-bin.zip}。
+  
+\item 将其解压到 AndroidDev 目录下（记得消去嵌套的同名目录）。
+\end{enumerate}
+
+\subsection{让 cocos2d-x 能够使用 SDK/AVD/NDK}
+
+以上步骤完成后，应该在 \texttt{AndroidDev} 目录下形成如
+图 \ref{fig:floder-androiddev} 的目录。
+
+% \begin{figure}[!hp]
+%   \centering
+%   \includegraphics*[width=\textwidth]{images/androiddev-folder}
+%   \caption{AndroidDev 目录结构}
+%   \label{fig:floder-androiddev}
+% \end{figure}
+
+\begin{center}
+  \includegraphics*[width=\textwidth]{images/androiddev-folder}
+\end{center}
+
+但这样还不够，cocos2d-x 还不知道你的 SDK/NDK 装到哪里了。
+
+\begin{enumerate}
+\item 进入我们在 2.3 节将 cocos2d-x-3.14.1 解压至的目录 A。点
+  击\texttt{setup.py}
+\item 弹出如图 \ref{fig:cocos-setup-ndk} 命令行窗口提示要输
+  入 NDK\_ROOT 的位置。我们输入前面将 NDK 所解压的位置后回车确认。（在
+  我的电脑上是
+  \texttt{C:\textbackslash{}AndroidDev\textbackslash{}android-ndk-r14}，
+  注意不要在最后加个反斜杠）
+
+  \begin{center}
+    \includegraphics*[width=.8\textwidth]{images/cocos-setup-ndk}    
+  \end{center}
+  
+\item 提示要输入 ANDROID\_SDK\_ROOT，我们输入 AndroidDev 目录的位置后
+  回车确认。（在我的电脑上
+  是\texttt{C:\textbackslash{}AndroidDev}，注意不要在最后加个反斜杠）
+  
+\item 提示要输入 ANT\_ROOT，我们输入 AndroidDev 目录下 Ant 目录下 bin 目
+  录的位置后回车确认。（在我的电脑上是
+  \texttt{C:\textbackslash{}AndroidDev\textbackslash{}apache-ant-1.10.1\textbackslash{}bin}
+  ，注意不要在最后加个反斜杠）
+
+\end{enumerate}
+
+% \begin{figure}[!hp]
+%   \centering
+%   \includegraphics*[width=.8\textwidth]{images/cocos-setup-ndk}
+%   \caption{Cocos 最终设置}
+%   \label{fig:cocos-setup-ndk}
+% \end{figure}
+
+\subsection{验证你的安装}
+
+\begin{enumerate}
+\item 使用 CMD cd 入我们在 2.6 节所建立项目的目录下。执行如图
+  \ref{fig:cocos-run-android} 所示的命令\\
+  \inlinecode{cocos run -p android --ap android-23 --app-abi x86}
+
+  \begin{center}
+    \includegraphics*[width=.8\textwidth]{images/cocos-run-android}
+  \end{center}
+  
+\item 经过一个漫长的编译期后，若出现如图 \ref{fig:cocos-wait-device} 所
+  示 --- wait for device，则可认为安装成功
+
+  \begin{center}
+    \includegraphics*[width=.8\textwidth]{images/cocos-wait-device}
+  \end{center}
+\end{enumerate}
+
+% \begin{figure}[!hp]
+%   \centering
+%   \includegraphics*[width=.8\textwidth]{images/cocos-run-android}
+%   \caption{Cocos 编译安卓 APK}
+%   \label{fig:cocos-run-android}
+% \end{figure}
+
+% \begin{figure}[!hp]
+%   \centering
+%   \includegraphics*[width=.8\textwidth]{images/cocos-wait-device}
+%   \caption{Cocos 等待安卓设备}
+%   \label{fig:cocos-wait-device}
+% \end{figure}
+
+
+\section{好了，安装完了，我该怎么使用}
+
+上面那么多安装步骤最终都是为了能正常使用 \texttt{cocos} 这个命令。也就
+是说配置好了，你就可以忘掉上面那些东西了，只需要使用 \texttt{cocos} 这
+个命令就可以了。
+
+\subsection{新建项目}
+
+\inlinecode{cocos new -l cpp -p <what-you-like> -d <where-you-like>}
+
+\subsection{在 Windows 下运行项目}
+
+使用 VS 打开项目目录/proj.win32/MyCppGame.sln，然后点击调试。
+
+\subsection{在 Android 模拟器下运行项目}
+
+\begin{enumerate}
+\item 在 CMD 下输入下面的命令，打开 Android 模拟器管理器： \\
+  \inlinecode{你的 AndroidDev 所在的位置（比
+    如 C:）
+    \textbackslash{}AndroidDev\textbackslash{}tools\textbackslash{}android.bat
+    avd}
+\item 启动某个模拟器
+\item CMD 在项目根目录下运行 \inlinecode{cocos run -p android --ap
+    android-23 --app-abi x86}
+\end{enumerate}
+
+\subsection{在 Android 实机上运行项目}
+
+\begin{enumerate}
+\item 连接你的手机
+\item CMD 在项目根目录下运行 \inlinecode{cocos run -p android --ap
+    android-23 --app-abi armeabi-v7a}
+\end{enumerate}
+
+注意：本节所使用命令并不用来最终部署。关于部署，届时会有另外一篇文档来
+说明。
+
+\subsection{写成脚本，快速运行}
+
+每次使用 CMD 来输入命令是很不方便的。可以写几个脚本来自动运行，当我们需
+要的时候只要点一下就能执行任务了。
+
+示例（这些示例脚本放在本文档所在目录的 scripts 目录下，如果你的环境配置
+目录和示例相同，直接将 scripts 目录拷贝到项目根目录下即可使用）：
+
+\begin{enumerate}
+\item
+  sdk-mgr.bat：
+  \inlinecode{C:\textbackslash{}AndroidDev\textbackslash{}tools\textbackslash{}android.bat}
+\item
+  avd-mgr.bat：
+  \inlinecode{C:\textbackslash{}AndroidDev\textbackslash{}tools\textbackslash{}android.bat
+    avd}
+\item run-emulator.bat:
+  \inlinecode{cd ..  
+    cocos run -p android --ap android-23 --app-abi x86}
+\item run-phone.bat:
+  \inlinecode{cd ..  
+    cocos run -m release -p android --ap android-23 --app-abi
+    armeabi-v7a}
+\end{enumerate}
+
+\subsection{多人协作？}
+
+多人协作模型现在还没有定下来，届时会有另外一篇文档来说明。
+
+\section{你说的这些我都懂，但我的环境就是配置不好}
+
+第三章『开发平台 Windows / 目标运行平台 Android』配置起来确实很难，再加
+上文档是短时间写出来的，没有仔细检查。如果你无论如何都配置不好，很可能
+是文档本身的错误，请及时报于开发组长『张晨』。
+
+\section{其他说明}
+
+\subsection{为什么下载 Android SDK 6.0}
+
+// TODO
+
+\subsection{为什么编译这么慢}
+
+C++ 编译的特点，就是慢。一般而言第一次编译慢，以后就快了（因为是基
+于 Makefile 的）。
+
+\subsection{为什么不使用 Eclipse / AS}
+
+简单的来说：没有必要。
+
+Cocos 对特定平台的依赖很小，几乎在所有的平台上都是：平台特有的启动器将
+应用启动之后就全权交给 cocos 引擎，让 cocos 引擎自己来工作了。
+
+\begin{description}
+\item [谷歌已经明确表示不支持 Eclipse 了]。Eclipse 版本
+  的 ADT，在 2015 年 6 月谷歌就不再维护了。官方声明\\(
+  \url{https://developer.android.com/studio/tools/sdk/eclipse-adt.html},\\
+  \url{https://android-developers.googleblog.com/2015/06/an-update-on-eclipse-android-developer.html})\\
+  如下：
+
+  \begin{shaded}
+    The Eclipse ADT plugin is no longer supported per our
+    announcement. Android Studio is now the official IDE for Android,
+    so you should migrate your projects to Android Studio as soon as
+    possible. For more information on transitioning to Android Studio,
+    see Migrate to Android Studio from Eclipse.
+  \end{shaded}
+
+  cocos2d-x 在 v3.15 的 release notes 中也提到以后会移除对 eclipse 项目
+  的支持。
+  
+\item [cocos2d-x 对 Android Studio 支持不完善]。 不过 v3.15（尚未发
+  布） 明确表示 ``full Android Studio supports''。使用现在的 v3.14.1 版
+  本，配置复杂度和我们要做的几乎相同（是的，我亲身尝试过）。
+  
+\item [Eclipse/AS 作用很小]。 我们不需要写任何 Android 平台相关的 Java
+  代码 --- 不需要在 Eclipse 或者 Android Studio 里面进行任何编码和调
+  试。Visual Studio 的调试功能比 Eclipse+CDT 或者 AS 要强的多。
+
+  开着 Eclipse/AS 也仅仅能辅助一下部署过程。而这个部署，我们可以用仅仅
+  一条命令来完成。
+  
+\item [从头配置更简单]。每个人已经安装的 IDE 不同，已经配置的 Android
+  开发环境不同。配置新的环境远远比调整原有的环境简单和容易。
+\end{description}
+
+\subsection{为什么有两个目标运行平台}
+
+是的，我们在开发的时候两个目标运行平台都要使用。
+
+目标运行平台 Windows 性能强，启动快，是用于快速验证想法和代码的，平常大
+部分的工作都在 Windows 上进行。
+
+目标运行平台 Android 启动较慢，性能较弱。但游戏的真实体验只有在手机上动
+手玩一玩才能知道。所以必要的时候（经常），我们还需要 Android 来了解真实
+的体验，以此来调整游戏参数。
+
+\subsection{是否升级到 cocos2d-x 3.15}
+
+这篇配置指南定稿的时候 v3.15 尚未发布。而且从 cocos2d-x 团队公布的开发
+进度来看，v3.15 发布可能还需要一段时间。所以建议使用 v3.14.1 版本进行开
+发。如果以后发现确实需要 v3.15，届时会有另外一篇文档来说明。
+
+\end{document}
