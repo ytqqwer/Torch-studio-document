@@ -6,36 +6,33 @@
 
 <!-- TOC depthFrom:2 -->
 
-- [1. 我们的分支模型](#1-我们的分支模型)
-- [2. 搭建本地协作环境](#2-搭建本地协作环境)
-    - [2.1. 注册 GitHub 帐号](#21-注册-github-帐号)
-    - [2.2. 安装和配置本地 Git 客户端](#22-安装和配置本地-git-客户端)
-    - [2.3. 安装 clang-format plugin for Visual Studio](#23-安装-clang-format-plugin-for-visual-studio)
-- [3. 克隆远程仓库到本地](#3-克隆远程仓库到本地)
-- [4. 在本地 commit 并 push](#4-在本地-commit-并-push)
-    - [4.1. commit/push 前注意](#41-commitpush-前注意)
-    - [4.2. （选项一）使用 Git bash 来 commit](#42-选项一使用-git-bash-来-commit)
-    - [4.3. （选项二）使用 Visual Studio 来 commit](#43-选项二使用-visual-studio-来-commit)
-    - [4.4. commit msg 书写规范](#44-commit-msg-书写规范)
-    - [4.5. push 到 github(origin)](#45-push-到-githuborigin)
-- [5. 管理 commit](#5-管理-commit)
+- [1. 搭建本地协作环境](#1-搭建本地协作环境)
+    - [1.1. 注册 GitHub 帐号](#11-注册-github-帐号)
+    - [1.2. 安装和配置本地 Git 客户端](#12-安装和配置本地-git-客户端)
+    - [1.3. 安装 clang-format plugin for Visual Studio](#13-安装-clang-format-plugin-for-visual-studio)
+- [2. 都有哪些东西放入 Github 仓库](#2-都有哪些东西放入-github-仓库)
+- [3. 仓库中都有哪些分支](#3-仓库中都有哪些分支)
+    - [3.1. 日常开发 master --- 单分支、减少 Git 的使用负担](#31-日常开发-master-----单分支减少-git-的使用负担)
+    - [3.2. Bug 联调、特性测试 --- 另开分支、做好隔离](#32-bug-联调特性测试-----另开分支做好隔离)
+- [4. 克隆仓库到本地](#4-克隆仓库到本地)
+- [5. 在本地工作](#5-在本地工作)
+- [6. commit 并 push 到 Github 上](#6-commit-并-push-到-github-上)
+    - [6.1. commit/push 前注意](#61-commitpush-前注意)
+    - [6.2. commit msg 书写规范](#62-commit-msg-书写规范)
+    - [6.3. （选项一）使用 Git bash 来 commit / push](#63-选项一使用-git-bash-来-commit--push)
+    - [6.4. （选项二）使用 Visual Studio 来 commit / push](#64-选项二使用-visual-studio-来-commit--push)
+- [7. 待确定问题](#7-待确定问题)
+- [8. 如果你遇到问题](#8-如果你遇到问题)
 
 <!-- /TOC -->
 
 ---
 
-## 1. 我们的分支模型
-
-随着开发进行，可能会对下面描述的分支模型进行一定更改。
-
-// TODO 待商讨
-// 单分支，尽量减少 Git 使用负担
-
-## 2. 搭建本地协作环境
-
 本次『工程设计与管理』中，我们使用 Git 来进行小组内文档和代码协作，使用 clang-format 来统一代码风格。
 
-### 2.1. 注册 GitHub 帐号
+## 1. 搭建本地协作环境
+
+### 1.1. 注册 GitHub 帐号
 
 1. 在 [GitHub](www.github.com) 上注册帐号，注意：
 
@@ -45,7 +42,7 @@
 
     在 Settings > Profile > Public profile 下填写 Name 一项后点击 `Update profie` 。开发过程中不要再更改此 Name。
 
-### 2.2. 安装和配置本地 Git 客户端
+### 1.2. 安装和配置本地 Git 客户端
 
 1. 从 [git 官网](https://git-scm.com/) 上下载 Git for Windows，并以默认选项安装。
 1. 熟悉 Git Bash。Git for Windows 自带 `Git Bash` `Git CMD` `Git GUI` 三种用户界面。在本次工程设计中，我们只使用 `Git Bash`。在实际进行 Git 相关操作以前，熟悉 `Git Bash` 并调整的字体大小以及默认窗口大小满意自己喜好。
@@ -66,31 +63,66 @@
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 ```
 
-### 2.3. 安装 clang-format plugin for Visual Studio
+### 1.3. 安装 clang-format plugin for Visual Studio
 
 大括号换行的和大括号不换行的打起来怎么办？ (´_ゝ｀)
 
 为了避免上面这种情况，我们使用统一的代码风格。[clang-format](https://clang.llvm.org/docs/ClangFormat.html) 可以跨平台使用，可以集成到各种 IDE 里面，而且使用纯文本形式的代码风格描述方式（.clang-format）。我们将使用这个工具来统一代码风格。
 
 1. 打开网址 [LLVM Snapshot Builds](http://llvm.org/builds/)，点击页面最后一个链接，下载 ClangFormat-r298093.vsix
-1. 点击下载好的文件，直接安装。安装好之后应该能在 VS > Tools 菜单内见到相应按钮。
+1. 点击下载好的文件，直接安装。安装好之后应该能在 VS > Tools 菜单内见到相应按钮，点击 2 号按钮即可对当前文件中的代码进行格式化。
 
-// TODO 待商讨代码风格 Google/Mozilla/LLVM？
+`.clang-format` 届时会直接放在代码库里。
 
-规定代码风格的文件 `.clang-format` 届时会直接放在代码库里。
+## 2. 都有哪些东西放入 Github 仓库
 
-## 3. 克隆远程仓库到本地
+简单的来说，cocos2d-x 能自动生成而且不需要人工干预或者更改的都不放入 Git 仓库。
+
+// TODO
+
+## 3. 仓库中都有哪些分支
+
+![](../images/git-branchs-overview.jpg)
+
+### 3.1. 日常开发 master --- 单分支、减少 Git 的使用负担
+
+平常，我们工作在 master 分支上，也只需关心这个分支上的变化。平常的功能点，小的 bug 修复都直接做在这个分支上。
+
+这个分支上汇聚着所有人的工作成果，合适的时候由组长在上面打 tag 来标识一个阶段的完成。
+
+往上面推 commit 的原则是：别人将你推上去的 commit pull 下来之后不能影响他自己的工作，推上去之后没有特殊情况禁止撤销。
+
+### 3.2. Bug 联调、特性测试 --- 另开分支、做好隔离
+
+除了 master 分支做主开发之外，还有两种不常用而且较复杂的分支。如果你看不懂如下的说明，也不必担心，当真正使用这种分支的时候一般会由组长统筹。
+
+1. **严重错误/联合调试**：要是你的代码一运行或者还没运行就 seg fault 了，而且它还处于游戏运行必经的路径上，那肯定是不能推到 master 分支上的，不然大家的本地代码都要玩完。
+
+    如果另外一个人决定来帮你调试，但前提是你将其推到 Git 仓库里面（用别人的开发环境是来调试是一件痛苦的工作），那你必须将其推到一个新分支上，使其和 master 分支隔离。等到你们调试之后，再将其合并到 master 分支上。
+
+    这种分支需要有人对 Git 有较深的了解才能正常创建和合并，所以当确实需要联调的时候尽量找组长。
+
+1. **大型特性**：有些特性短时间不能做完，而且没做完的时候又不能推到 master 分支上，不然别人拉下来会破坏他自己的开发。
+
+    这个时候需要将未完成的内容推到新特性分支上。不断往特性分支上推 commit，等到特性完成完成再合并到 master 分支上。
+
+## 4. 克隆仓库到本地
 
 一般来说，用 `git clone` 命令就可以了。但 cocos2d-x 项目较为复杂，牵涉较多，我们又要做跨平台。所以统一使用 `1.环境搭建与技术学习/make-local-*-repo.sh` 这个脚本来建立本地仓库。
 
 将 `make-local-*-repo.sh` 拷贝到你想存放本地仓库的地方，然后运行这个 sh 脚本文件即可。如果你想知道它实际做了做了什么，可以使用 VS Code 打开以查看脚本内容。
 
-## 4. 在本地 commit 并 push
+## 5. 在本地工作
 
-### 4.1. commit/push 前注意
+// TODO
+
+## 6. commit 并 push 到 Github 上
+
+### 6.1. commit/push 前注意
 
 1. 确保编译通过
     代码能编译通过是 commit **最基本**的要求。因为一旦你 push commit，所有人都将能够获取到你的代码。如果你 push 的代码编译不通过，pull 下来之后，所有人的代码都会编译不通过，这会破坏所有人的开发体验。
+
 1. 格式化你的代码
     代码风格统一是小组协作的首要条件。修改过某 c/c++ 源码之后，可以在 VS 内使用 Tools > 2 Clang Format Document，将整个文件格式化。
 
@@ -99,21 +131,43 @@
 
     如果真的不小心引入了不必要的修改，可以按照『廖雪峰的 Git 教程』或者其他文档所讲解还原尚未 commit 的更改。
 
-### 4.2. （选项一）使用 Git bash 来 commit
+### 6.2. commit msg 书写规范
 
-// TODO
+一个书写良好的 commit msg 对理解一个 commit 干了哪些事情至关重要。
 
-### 4.3. （选项二）使用 Visual Studio 来 commit
+本着不重复造轮子的原则，我们这次的项目直接使用 [How to Write a Git Commit Message](https://chris.beams.io/posts/git-commit/) 所描述的 "the seven rules"。但并不要求一定要写 commit body。
+
+除 "the seven rules" 以外，本次项目设计中附加一条规则：
+
+1. subject line 以 新增/修改 的模块名开头，并加一个冒号。
+    以 Linux commit log 为例：
+
+    `tcp: minimize false-positives on TCP/GRO check` 以模块名 tcp 开头
+
+    `l2tp: take reference on sessions being dumped` 以模块名 l2tp 开头
+
+    `drm/msm: Make sure to detach the MMU during GPU cleanup` 以模块名 drm/msm 开头
+
+### 6.3. （选项一）使用 Git bash 来 commit / push
+
+commit/push 有两种方式，a) Git Bash b) Visual Studio 集成功能。
+
+本节讲述如何使用 Git Bash 进行 commit，并 push 到 Github 上。
+
+// TODO by 张健淳
+
+### 6.4. （选项二）使用 Visual Studio 来 commit / push
+
+本节讲述如何使用 Visual Studio 的集成 Git 功能将代码 commit，并 push 到 Github 上。
 
 // TODO by 张晨
 
-### 4.4. commit msg 书写规范
+## 7. 待确定问题
 
-WIP
-seg fault
+- [ ] sln/vcxproj 是否要做版本管理
+- [ ] 正式开发的时候美术工程师所产生作品如何进行管理
+- [ ] 代码风格 Google/Mozilla/LLVM？
 
-### 4.5. push 到 github(origin)
+## 8. 如果你遇到问题
 
-## 5. 管理 commit
-
-// TODO or WON'T
+如果你上网查找了资料仍无法解决问题，及时找组长帮助。
