@@ -11,6 +11,8 @@
     - [1.2. 安装和配置本地 Git 客户端](#12-安装和配置本地-git-客户端)
     - [1.3. 安装 clang-format plugin for Visual Studio](#13-安装-clang-format-plugin-for-visual-studio)
 - [2. 都有哪些东西放入 Github 仓库](#2-都有哪些东西放入-github-仓库)
+    - [2.1. 关于构建系统配置文件](#21-关于构建系统配置文件)
+    - [2.2. 关于 Resources](#22-关于-resources)
 - [3. 仓库中都有哪些分支](#3-仓库中都有哪些分支)
     - [3.1. 日常开发 master --- 单分支、减少 Git 的使用负担](#31-日常开发-master-----单分支减少-git-的使用负担)
     - [3.2. Bug 联调、特性测试 --- 另开分支、做好隔离](#32-bug-联调特性测试-----另开分支做好隔离)
@@ -19,8 +21,7 @@
 - [6. commit 并 push 到 Github 上](#6-commit-并-push-到-github-上)
     - [6.1. commit/push 前注意](#61-commitpush-前注意)
     - [6.2. commit msg 书写规范](#62-commit-msg-书写规范)
-    - [6.3. （选项一）使用 Git bash 来 commit / push](#63-选项一使用-git-bash-来-commit--push)
-    - [6.4. （选项二）使用 Visual Studio 来 commit / push](#64-选项二使用-visual-studio-来-commit--push)
+    - [6.3. commit/push 方式](#63-commitpush-方式)
 - [7. 待确定问题](#7-待确定问题)
 - [8. 如果你遇到问题](#8-如果你遇到问题)
 
@@ -78,7 +79,23 @@
 
 简单的来说，cocos2d-x 能自动生成而且不需要人工干预或者更改的都不放入 Git 仓库。
 
-// TODO
+具体哪些文件放入版本控制系统，参见代码库下 .gitignore 文件。
+
+### 2.1. 关于构建系统配置文件
+
+1. **proj.win32/sln,vcxproj** 是 VS 构建项目的文件。但由于组里面没有人了解 VS vcxproj/sln 的详细使用规则，为防止不同人的不同版本之间造成冲突，此文件暂不放入版本控制系统。
+
+    在第一次将代码拉到本地时，需要 xxxxx
+
+    // TODO by 张晨
+
+1. **/CMakeLists.txt** CMakelists.txt 是 CMake 编译项目必需的文件，主要由 Linux 平台使用。为控制构建 CMake 过程，需要手动修改其中内容。
+
+1. **proj.android/jni/Android.mk** 是 Android NDK 构建系统的构建脚本。为正确构建 Android APK 需要手动修改其中内容。
+
+### 2.2. 关于 Resources
+
+Resources 文件夹内放置实际在项目中使用资源。供挑选而未实际使用的资源定期上传至群文件里，不放置此处。
 
 ## 3. 仓库中都有哪些分支
 
@@ -112,9 +129,11 @@
 
 将 `make-local-*-repo.sh` 拷贝到你想存放本地仓库的地方，然后运行这个 sh 脚本文件即可。如果你想知道它实际做了做了什么，可以使用 VS Code 打开以查看脚本内容。
 
+// TODO by 张健淳
+
 ## 5. 在本地工作
 
-// TODO
+正式开工时，由组长讲解。
 
 ## 6. commit 并 push 到 Github 上
 
@@ -148,23 +167,12 @@
 
     `drm/msm: Make sure to detach the MMU during GPU cleanup` 以模块名 drm/msm 开头
 
-### 6.3. （选项一）使用 Git bash 来 commit / push
+### 6.3. commit/push 方式
 
-commit/push 有两种方式，a) Git Bash b) Visual Studio 集成功能。
-
-本节讲述如何使用 Git Bash 进行 commit，并 push 到 Github 上。
-
-// TODO by 张健淳
-
-### 6.4. （选项二）使用 Visual Studio 来 commit / push
-
-本节讲述如何使用 Visual Studio 的集成 Git 功能将代码 commit，并 push 到 Github 上。
-
-// TODO by 张晨
+commit/push 有两种方式，a) Git Bash  b) Visual Studio 集成的 git 功能。可以选择你喜欢的方式，只要保证符合以上所述规范。
 
 ## 7. 待确定问题
 
-- [ ] sln/vcxproj 是否要做版本管理
 - [ ] 正式开发的时候美术工程师所产生作品如何进行管理
 - [ ] 代码风格 Google/Mozilla/LLVM？
 
