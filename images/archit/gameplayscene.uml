@@ -1,0 +1,19 @@
+@startuml
+
+GameplayScene *-- CtrlPanelLayer
+GameplayScene *-- CardAndPropLayer
+GameplayScene *-- HUDLayer
+GameplayScene *-- BattleLandLayer
+GameplayScene *-- ConversationLayer
+GameplayScene *-- SettingsLayer
+
+
+BattleLandLayer *-- 地图
+BattleLandLayer *-- 玩家
+BattleLandLayer *-- 敌人
+BattleLandLayer *-- 弹幕
+
+HUDLayer *-- 玩家血条和蓝条
+HUDLayer *-- BOSS血条
+
+@enduml

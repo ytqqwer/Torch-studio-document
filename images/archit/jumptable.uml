@@ -1,0 +1,33 @@
+@startuml
+
+[*] --> Non_Gameplay : 打开游戏
+
+state Non_Gameplay {
+
+[*] --> LogoAndDisclaimerScene
+
+LogoAndDisclaimerScene --> JumpTableScene
+
+JumpTableScene --> BackgroundIntroScene
+
+JumpTableScene --> MainMenuScene
+
+JumpTableScene --> HomeScene  : 新游戏
+JumpTableScene --> SaveScene  : 载入存档
+JumpTableScene --> StaffScene : 职员表
+
+JumpTableScene --> RoudSelectScene  : 出发
+JumpTableScene --> KnowledgeBaseScene : 资料库
+JumpTableScene --> PropsLibScene : 道具库
+JumpTableScene --> PreparationScene : 整备
+JumpTableScene --> MapSelectScene : 选择/切换地点
+
+JumpTableScene --> KourindouScene : 香霖堂
+JumpTableScene --> KoumakanLibraryScene : 红魔馆大图书馆
+JumpTableScene --> 军火店Scene : 军火店
+
+}
+
+JumpTableScene --> Gameplay : 开始游戏
+
+@enduml

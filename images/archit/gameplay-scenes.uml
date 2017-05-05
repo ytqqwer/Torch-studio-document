@@ -1,0 +1,15 @@
+@startuml
+
+[*] -> Gameplay : 开始游戏
+
+state Gameplay {
+
+[*] -> ResourceLoaderScene
+ResourceLoaderScene -> GameplayScene
+
+}
+
+GameplayScene --> HomeScene : [ 关卡结束后自动 / 游戏中手动 ]\n返回主界面
+GameplayScene --> MainMenuScene : [ 游戏中手动 ]\n返回主菜单
+
+@enduml

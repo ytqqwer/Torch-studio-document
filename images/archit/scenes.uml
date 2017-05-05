@@ -1,0 +1,13 @@
+@startuml
+
+skinparam monochrome true
+
+state "Non-Gameplay 场景" as S1
+state "Gameplay 场景" as S2
+
+[*] --> S1 : 游戏开始
+S1 -right-> S2
+S2 -left-> S1
+S1 --> [*] : 游戏结束
+
+@enduml

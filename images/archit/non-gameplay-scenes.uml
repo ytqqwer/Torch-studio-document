@@ -1,0 +1,40 @@
+@startuml
+
+skinparam state{
+BackgroundColor<<MAIN>> Peru
+}
+
+[*] --> Non_Gameplay : 打开游戏
+
+state Non_Gameplay {
+
+[*] --> LogoAndDisclaimerScene<<MAIN>>
+LogoAndDisclaimerScene : 包含：工作室 logo Layer，免责声明 Layer\n在这个场景中加载设定数据与所有存档
+
+LogoAndDisclaimerScene --> BackgroundIntroScene<<MAIN>>
+
+BackgroundIntroScene --> MainMenuScene<<MAIN>>
+MainMenuScene : 包含：缓冲界面Layer，主菜单Layer\n进入设置界面时使用 SettingsLayer
+
+MainMenuScene --> HomeScene<<MAIN>> : 新游戏
+MainMenuScene --> SaveScene<<MAIN>> : 载入存档
+MainMenuScene -> StaffScene : 职员表
+
+SaveScene --> HomeScene : 确定
+HomeScene : 进入设置界面时使用 SettingsLayer\n进入对话界面使用 ConversationLayer
+
+HomeScene --> RoudSelectScene<<MAIN>> : 出发
+HomeScene -left-> KnowledgeBaseScene : 资料库
+HomeScene -left-> PropsLibScene : 道具库
+HomeScene --> PreparationScene : 整备
+HomeScene -> MapSelectScene : 选择/切换地点
+
+MapSelectScene -up-> KourindouScene : 香霖堂
+MapSelectScene -> KoumakanLibraryScene : 红魔馆大图书馆
+MapSelectScene --> 军火店Scene : 军火店
+
+}
+
+RoudSelectScene --> Gameplay : 开始游戏
+
+@enduml

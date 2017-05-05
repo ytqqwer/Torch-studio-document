@@ -1,0 +1,15 @@
+@startuml
+
+skinparam monochrome true
+
+state "数据模块做内部准备工作，向外部提供接口对象 GameData" as S1
+state "游戏逻辑对 GameData 进行访问/更改" as S2
+state "数据模块将 GameData 的更改同步到存档文件" as S3
+
+[*] -up-> S1 : 游戏启动
+S1 -> S2 : 游戏逻辑启动
+S2 -down-> S3 : 存档指令
+S3 -up-> S2 : 游戏继续进行
+S3 -left-> [*] : 游戏结束
+
+@enduml
