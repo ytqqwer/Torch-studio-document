@@ -1,7 +1,7 @@
 @startuml
 
 GameplayScene *-- CtrlPanelLayer
-GameplayScene *-- CardAndPropLayer
+GameplayScene *-- SpellCardAndItemLayer
 GameplayScene *-- HUDLayer
 GameplayScene *-- BattleLandLayer
 GameplayScene *-- ConversationLayer

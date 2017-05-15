@@ -25,13 +25,13 @@ HomeScene : 进入设置界面时使用 SettingsLayer\n进入对话界面使用 
 
 HomeScene --> RoudSelectScene<<MAIN>> : 出发
 HomeScene -left-> KnowledgeBaseScene : 资料库
-HomeScene -left-> PropsLibScene : 道具库
-HomeScene --> PreparationScene : 整备
+HomeScene -left-> InventoryScene : 道具库
+HomeScene --> EquipScene : 整备
 HomeScene -> MapSelectScene : 选择/切换地点
 
 MapSelectScene -up-> KourindouScene : 香霖堂
 MapSelectScene -> KoumakanLibraryScene : 红魔馆大图书馆
-MapSelectScene --> 军火店Scene : 军火店
+MapSelectScene --> ArmsStoreScene : 军火店
 
 }
 
