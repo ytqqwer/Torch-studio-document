@@ -64,16 +64,15 @@
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 ```
 
-### 1.3. 安装 clang-format plugin for Visual Studio
+### 1.3. 安装 clang-format
 
 大括号换行的和大括号不换行的打起来怎么办？ (´_ゝ｀)
 
-为了避免上面这种情况，我们使用统一的代码风格。[clang-format](https://clang.llvm.org/docs/ClangFormat.html) 可以跨平台使用，可以集成到各种 IDE 里面，而且使用纯文本形式的代码风格描述方式（.clang-format）。我们将使用这个工具来统一代码风格。
+为了避免上面这种情况，我们使用统一的代码风格。[clang-format](https://clang.llvm.org/docs/ClangFormat.html) 可以跨平台使用，可以集成到各种 IDE 里面，而且使用纯文本形式的代码风格描述方式（.clang-format，这个文件届时会直接放入代码库）。我们将使用这个工具来统一代码风格。
 
-1. 打开网址 [LLVM Snapshot Builds](http://llvm.org/builds/)，点击页面最后一个链接，下载 ClangFormat-r298093.vsix
-1. 点击下载好的文件，直接安装。安装好之后应该能在 VS > Tools 菜单内见到相应按钮，点击 2 号按钮即可对当前文件中的代码进行格式化。
-
-`.clang-format` 届时会直接放在代码库里。
+1. 打开网址 [LLVM Download Page](http://releases.llvm.org/download.html)，下载 Clang for Windows (64-bit)
+1. 安装时选择 `Add LLVM to the system PATH for all users`
+1. 打开 Git Bash，输入 `clang-format.exe -i the-file-to-format` 即可对 the-file-to-format 进行格式化
 
 ## 2. 都有哪些东西放入 Github 仓库
 
