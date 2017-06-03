@@ -1,0 +1,10 @@
+@startuml
+
+[*] -up-> A : 载入 A
+
+A -up-> cachedSave : 复制 A
+cachedSave -down-> B : 覆盖 B
+
+B -down-> [*] : 结束
+
+@enduml
