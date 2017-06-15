@@ -1,5 +1,7 @@
 @startuml
 
+skinparam monochrome true
+
 [*] -up-> A : 载入 A
 
 A -up-> cachedSave : 复制 A

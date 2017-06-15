@@ -1,5 +1,7 @@
 @startuml
 
+skinparam monochrome true
+
 [*] --> Non_Gameplay : 打开游戏
 
 state Non_Gameplay {
