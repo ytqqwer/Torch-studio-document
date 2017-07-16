@@ -9,9 +9,12 @@
 - [1. 搭建本地协作环境](#1-搭建本地协作环境)
     - [1.1. 注册 GitHub 帐号](#11-注册-github-帐号)
     - [1.2. 安装和配置本地 Git 客户端](#12-安装和配置本地-git-客户端)
-    - [1.3. 安装 clang-format plugin for Visual Studio](#13-安装-clang-format-plugin-for-visual-studio)
+    - [1.3. 安装 clang-format](#13-安装-clang-format)
 - [2. 都有哪些东西放入 Github 仓库](#2-都有哪些东西放入-github-仓库)
     - [2.1. 关于构建系统配置文件](#21-关于构建系统配置文件)
+        - [2.1.1. /proj.win32/sln,vcxproj for Windows+VS](#211-projwin32slnvcxproj-for-windowsvs)
+        - [2.1.2. /CMakeLists.txt for Linux](#212-cmakeliststxt-for-linux)
+        - [2.1.3. /proj.android/jni/Android.mk for Android](#213-projandroidjniandroidmk-for-android)
     - [2.2. 关于 Resources](#22-关于-resources)
 - [3. 仓库中都有哪些分支](#3-仓库中都有哪些分支)
     - [3.1. 日常开发 master --- 单分支、减少 Git 的使用负担](#31-日常开发-master-----单分支减少-git-的使用负担)
@@ -81,15 +84,68 @@
 
 ### 2.1. 关于构建系统配置文件
 
-1. **proj.win32/sln,vcxproj** 是 VS 构建项目的文件。但由于组里面没有人了解 VS vcxproj/sln 的详细使用规则，为防止不同人的不同版本之间造成冲突，此文件暂不放入版本控制系统。
+#### 2.1.1. /proj.win32/sln,vcxproj for Windows+VS
 
-    在第一次将代码拉到本地时，需要 xxxxx
+1. **VS 以 sln 和 proj 组成两级的构建系统**
 
-    // TODO by 张晨
+    以我们的游戏项目为例：整个游戏项目是一个 sln，整个 sln 从源码到可运行程序的构建过程不仅仅需要我们自己写的代码，还需要 cocos2d-x 提供的代码，两套代码使用不同编译方案（编译时参数不同），所以 VS 提供了 proj 的概念。touhou-game 使用自己的 touhou-game.vcxproj 文件来控制自己的编译过程；libcocos2d 使用自己的 libbox2d.vcxproj 来控制自己的编译过程。
 
-1. **/CMakeLists.txt** CMakelists.txt 是 CMake 编译项目必需的文件，主要由 Linux 平台使用。为控制构建 CMake 过程，需要手动修改其中内容。
+    两级构建系统示例：
 
-1. **proj.android/jni/Android.mk** 是 Android NDK 构建系统的构建脚本。为正确构建 Android APK 需要手动修改其中内容。
+    ```
+    sln: touhou-game.sln
+    |-- touhou-game.vcxproj
+    |-- libcocos2d.vcxproj
+    |-- libbox2d.vcxproj
+    |-- ...
+    `-- librecast.vcxproj
+    ```
+
+    `cocos new` 命令生成的项目下有一个文件夹 proj.win32，这个文件夹存放了 sln 及其游戏本身的 vcxproj。里面还有一些其他 windows-specific 的东西，不在本节讨论范围内。我们关注游戏 proj 的构建过程，只关注 /proj.win32/touhou-game.vcxproj
+
+1. **但是 proj.win32 却不能直接放入版本管理**
+
+    vcxproj 文件内容依赖于 VS 版本。vs2015 和 vs2017 遇到与自己构建系统版本不同的 vcxproj 时会进行 `重定向`，这导致了不同 vs 都会修改 touhou-game.vcxproj 文件。直接纳入版本管理直接导致混乱和冲突。
+
+1. **故使用 proj.win32.github/proj.win32 双目录机制**
+
+    因此，我们额外添加一个 proj.win32.github 目录。proj.win32.github 纳入版本管理，proj.win32 不纳入版本管理。使用时将 proj.win32.github 拷贝一份为 proj.win32。打开 proj.win32 中的 sln，进行 `重定向` 即可打开项目。
+
+1. **顺便提一下 VS 的 filter**
+
+    VS 构建用的就是上面所说的 sln/vcxproj。cxproj 写好就能正确构建项目。但是要想在 VS 的『Solution Explorer/解决方案浏览器』里显示源文件还需要显式指定 filter。
+
+    > VS 并不按照文件系统中的文件结构在『Solution Explorer/解决方案浏览器』中显示源文件，它只根据 vcxproj.filters 里的描述来显示源文件
+
+    `<Filter>` 在 vcxproj.filters 中定义（可以没有 `<UniqueIndentifier>`），定义 `<Filter>` 之后再在下面定义每个 `<ClCompile>` 或 `<ClInclude>` 项所属的 filter。全部定义好之后 VS 就可以在『Solution Explorer/解决方案浏览器』里面正确显示文件了。一个 filter 在『Solution Explorer/解决方案浏览器』里面表现为一个文件夹。一个 `<ClCompile>` 或 `<ClInclude>` 项在『Solution Explorer/解决方案浏览器』里面表现为一个文件。
+
+1. **说了那么多，实际要怎么做**
+
+    1. 构建项目 -- 编译不了就拷贝
+
+        1. 开始时，将 proj.win32.github 拷贝一份为 proj.win32，打开 proj.win32 进行编译
+        1. 若在和 GitHub 仓库同步后不能编译项目，关闭 VS，将 proj.win32.github 拷贝一份为 proj.win32，打开 proj.win32 重新编译
+        1. 若无论如何都不能正常编译，及时与大家商讨
+
+        *注意：任何人无特殊目的不得直接重命名 proj.win32.github 为 proj.win32，或直接打开 proj.win32.github 内的项目。这会扰乱 proj.win32.github 的正常版本管理*。
+
+    1. 如何添加文件/目录 -- 手动
+
+        为了保持 vxcproj 文件结构清晰，/proj.win32.github/touhou-game.vcxproj /proj.win32.github/touhou-game.vcxproj.filters 文件内容**手动维护**，禁止使用 VS 相应功能间接修改。
+
+        1. 若是 .cpp 文件，添加 `<ClCompile>` 项到 /proj.win32.github/touhou-game.vcxproj 合适位置，并添加 `<ClCompile>` 项到 /proj.win32.github/touhou-game.vcxproj.filters 合适位置。（具体位置找见文件内注释）。
+        1. 若是 .h 文件，添加 `<ClInclude>` 项到 /proj.win32.github/touhou-game.vcxproj 合适位置，并添加 `<ClInclude>` 项到 /proj.win32.github/touhou-game.vcxproj.filters 合适位置。（具体位置找见文件内注释）。
+        1. 若是目录，则添加 `<Filter>` 项到 /proj.win32.github/touhou-game.vcxproj.filters 合适位置。`<Filter>` 项可以没有 `<Uniqueindentifier>`。
+
+#### 2.1.2. /CMakeLists.txt for Linux
+
+CMakelists.txt 是 CMake 编译项目必需的配置文件，主要由 Linux 平台使用。为控制构建 CMake 过程，需要手动修改其中内容。项目组中仅一人使用，由其个人维护和使用，此处不再额外说明。
+
+#### 2.1.3. /proj.android/jni/Android.mk for Android
+
+/proj.android/jni/Android.mk 是 Android NDK 构建系统的构建脚本。为正确构建 Android APK 需要手动修改其中内容。
+
+// TODO 更详细的介绍
 
 ### 2.2. 关于 Resources
 
